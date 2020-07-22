@@ -1,1 +1,24 @@
-<p>users-list works!</p>
+<div class="flex-center-container">
+  <div class="box">
+    <h2 class="mat-h1">Please choose a location</h2>
+    <div>
+      <mat-form-field>
+        <mat-label>Location</mat-label>
+        <input matInput placeholder="e.g. Bratislava" [(ngModel)]="location" />
+      </mat-form-field>
+      <div>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="searchUsers()"
+          class="button"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+    <div>
+      {{ users | json }}
+    </div>
+  </div>
+</div>

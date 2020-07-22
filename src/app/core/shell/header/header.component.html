@@ -2,5 +2,5 @@
   GithubApp
   <span class="spacer"></span>
   <span *ngIf="authenticated">Joe Github</span>
-  <span *ngIf="!authenticated">Sign in</span>
+  <button *ngIf="!authenticated" mat-raised-button>Sign in</button>
 </mat-toolbar>
