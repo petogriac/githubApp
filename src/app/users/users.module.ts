@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
 // Components
 import { UsersListComponent } from './users-list/users-list.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
@@ -22,6 +23,7 @@ import { UsersApiService } from './users.api.service';
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
+    MatTableModule,
   ],
   providers: [UsersApiService],
 })

@@ -16,9 +16,15 @@ export class UsersApiService {
     return this.httpClient.get(routePrefix + routes.users + `/${username}`);
   }
 
-  getUsersByLocation(location: string): Observable<any> {
+  getUsersByLocation(location: string, pageNumber: string): Observable<any> {
+    // return this.httpClient.get(
+    //   routePrefix + routes.users + routes.locationQuery + location
+    // );
     return this.httpClient.get(
-      routePrefix + routes.users + routes.locationQuery + location
+      routePrefix +
+        `/search/users?q=location:${
+          location ? location : undefined
+        }&page=${pageNumber}&per_page=10`
     );
   }
 }
