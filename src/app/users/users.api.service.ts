@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 const routePrefix = 'https://api.github.com';
 const routes = {
   users: '/users',
+  repos: '/repos',
+  followers: '/followers',
   locationQuery: '?location=',
 };
 
@@ -14,6 +16,18 @@ export class UsersApiService {
 
   getUser(username: string): Observable<any> {
     return this.httpClient.get(routePrefix + routes.users + `/${username}`);
+  }
+
+  getUserPublicRepos(username: string): Observable<any> {
+    return this.httpClient.get(
+      routePrefix + routes.users + `/${username}` + routes.repos
+    );
+  }
+
+  getUserFollowers(username: string): Observable<any> {
+    return this.httpClient.get(
+      routePrefix + routes.users + `/${username}` + routes.followers
+    );
   }
 
   getUsersByLocation(location: string, pageNumber: string): Observable<any> {

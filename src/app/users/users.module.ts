@@ -7,6 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 // Components
 import { UsersListComponent } from './users-list/users-list.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
@@ -24,6 +27,9 @@ import { UsersApiService } from './users.api.service';
     MatFormFieldModule,
     MatButtonModule,
     MatTableModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatTabsModule,
   ],
   providers: [UsersApiService],
 })
