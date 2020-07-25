@@ -1,12 +1,16 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule, ModuleWithProviders } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
 
-
+import { AuthService } from './auth.service';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
+  providers: [AngularFireAuth],
 })
-export class AuthModule { }
+export class AuthModule {
+  static forRoot(): ModuleWithProviders<any> {
+    return {
+      ngModule: AuthModule,
+      providers: [AuthService],
+    };
+  }
+}

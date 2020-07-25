@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "githubapp-8872c"
+  },
+  "targets": {
+    "githubapp-8872c": {
+      "hosting": {
+        "githubApp": [
+          "githubapp-8872c"
+        ]
+      }
+    }
   }
 }

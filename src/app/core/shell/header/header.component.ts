@@ -1,4 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -6,5 +8,21 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
-  @Input() authenticated: boolean;
+  constructor(private authService: AuthService, private router: Router) {}
+  @Input() user: any;
+  @Output() login = new EventEmitter();
+  @Output() logout = new EventEmitter();
+
+  onSignIn(): void {
+    this.login.emit();
+  }
+
+  onSignOut(): void {
+    this.logout.emit();
+    this.router.navigate([`/users`]);
+  }
+
+  onProfile(): void {
+    this.router.navigate([`/user`]);
+  }
 }

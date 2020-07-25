@@ -13,7 +13,7 @@ import IUser from '../interfaces/IUser';
 export class UsersListComponent implements OnInit {
   location: string;
   // TODO add interface IUser
-  users = new Array<any>();
+  users = new Array<IUser>();
   usersDetailedData = new Array<any>();
   displayedColumns: string[] = ['avatar_url', 'login', 'repos', 'followers'];
   isLoading: boolean;
@@ -33,7 +33,7 @@ export class UsersListComponent implements OnInit {
         this.usersDetailedData = [];
         this.users = response.items;
         this.users.forEach((user) => {
-          apisPerUser.push(this.usersApiService.getUser(user.login));
+          apisPerUser.push(this.usersApiService.getUserByUsername(user.login));
         });
 
         zip(...apisPerUser).subscribe(
