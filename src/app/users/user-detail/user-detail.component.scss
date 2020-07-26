@@ -1,19 +1,19 @@
 .back-link-wrapper {
-  margin: 30px;
-  position: absolute;
-  width: auto;
+    margin: 30px;
+    position: absolute;
+    width: auto;
 }
 
 .table-wrapper {
-  position: relative;
-  height: 50vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  table {
-    min-width: 500px;
-    padding-top: 10px;
-    img {
-      padding: 10px;
+    position: relative;
+    height: 50vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    table {
+        min-width: 500px;
+        padding-top: 10px;
+        img {
+            padding: 10px;
+        }
     }
-  }
 }

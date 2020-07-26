@@ -10,16 +10,16 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [
-    CoreModule,
-    UsersModule,
-    AppRoutingModule,
-    RouterModule,
-    AuthModule.forRoot(),
-    AngularFireModule.initializeApp(environment.firebaseConfig)
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [
+        CoreModule,
+        UsersModule,
+        AppRoutingModule,
+        RouterModule,
+        AuthModule.forRoot(),
+        AngularFireModule.initializeApp(environment.firebaseConfig)
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

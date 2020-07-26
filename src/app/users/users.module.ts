@@ -20,23 +20,23 @@ import { UsersRoutingModule } from './users-routing.module';
 import { UsersApiService } from './users.api.service';
 
 @NgModule({
-  declarations: [UsersListComponent, UserDetailComponent],
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    FormsModule,
-    UsersRoutingModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatTableModule,
-    MatProgressSpinnerModule,
-    MatIconModule,
-    MatTabsModule,
-    MatPaginatorModule,
-    MatCardModule,
-    MatButtonToggleModule,
-  ],
-  providers: [UsersApiService],
+    declarations: [UsersListComponent, UserDetailComponent],
+    imports: [
+        CommonModule,
+        HttpClientModule,
+        FormsModule,
+        UsersRoutingModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatTableModule,
+        MatProgressSpinnerModule,
+        MatIconModule,
+        MatTabsModule,
+        MatPaginatorModule,
+        MatCardModule,
+        MatButtonToggleModule
+    ],
+    providers: [UsersApiService]
 })
 export class UsersModule {}

@@ -3,26 +3,26 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
-  constructor(private authService: AuthService, private router: Router) {}
-  @Input() user: any;
-  @Output() login = new EventEmitter();
-  @Output() logout = new EventEmitter();
+    constructor(private authService: AuthService, private router: Router) {}
+    @Input() user: any;
+    @Output() login = new EventEmitter();
+    @Output() logout = new EventEmitter();
 
-  onSignIn(): void {
-    this.login.emit();
-  }
+    onSignIn(): void {
+        this.login.emit();
+    }
 
-  onSignOut(): void {
-    this.logout.emit();
-    this.router.navigate([`/users`]);
-  }
+    onSignOut(): void {
+        this.logout.emit();
+        this.router.navigate([`/users`]);
+    }
 
-  onProfile(): void {
-    this.router.navigate([`/user`]);
-  }
+    onProfile(): void {
+        this.router.navigate([`/user`]);
+    }
 }

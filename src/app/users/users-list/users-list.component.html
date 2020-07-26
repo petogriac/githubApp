@@ -1,30 +1,21 @@
 <div class="flex-center-container">
-  <div>
-    <div class="box">
-      <h2 class="mat-h1">Please choose a location</h2>
-      <div>
-        <mat-form-field>
-          <mat-label>Location</mat-label>
-          <input
-            matInput
-            placeholder="e.g. Bratislava"
-            [(ngModel)]="location"
-          />
-        </mat-form-field>
-        <div>
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="searchUsers(1, 10, true)"
-            class="button"
-          >
-            Search
-          </button>
+    <div>
+        <div class="box">
+            <h2 class="mat-h1">Please choose a location</h2>
+            <div>
+                <mat-form-field>
+                    <mat-label>Location</mat-label>
+                    <input matInput placeholder="e.g. Bratislava" [(ngModel)]="location" />
+                </mat-form-field>
+                <div>
+                    <button mat-raised-button color="primary" (click)="searchUsers(1, 10, true)" class="button">
+                        Search
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="table-wrapper" *ngIf="!firstLoading">
-      <!-- <div class="sort-wrapper">
+        <div class="table-wrapper" *ngIf="!firstLoading">
+            <!-- <div class="sort-wrapper">
         <span>Sort by</span>
         <mat-button-toggle-group
           name="sortType"
@@ -39,7 +30,7 @@
         </mat-button-toggle-group>
       </div> -->
 
-      <!-- <div class="flex-spacebetween">
+            <!-- <div class="flex-spacebetween">
         <button
           mat-raised-button
           color="primary"
@@ -66,68 +57,57 @@
         </button>
       </div> -->
 
-      <table mat-table [dataSource]="usersDetailedData" [hidden]="isLoading">
-        <ng-container matColumnDef="avatar_url">
-          <th mat-header-cell *matHeaderCellDef>Avatar</th>
-          <td mat-cell *matCellDef="let element">
-            <img
-              [src]="element.avatar_url"
-              class="rounded-image"
-              width="100"
-              height="100"
-            />
-          </td>
-        </ng-container>
+            <table mat-table [dataSource]="usersDetailedData" [hidden]="isLoading">
+                <ng-container matColumnDef="avatar_url">
+                    <th mat-header-cell *matHeaderCellDef>Avatar</th>
+                    <td mat-cell *matCellDef="let element">
+                        <img [src]="element.avatar_url" class="rounded-image" width="100" height="100" />
+                    </td>
+                </ng-container>
 
-        <ng-container matColumnDef="login">
-          <th mat-header-cell *matHeaderCellDef>Login</th>
-          <td mat-cell *matCellDef="let element">
-            <strong>{{ element.login }}</strong>
-          </td>
-        </ng-container>
+                <ng-container matColumnDef="login">
+                    <th mat-header-cell *matHeaderCellDef>Login</th>
+                    <td mat-cell *matCellDef="let element">
+                        <strong>{{ element.login }}</strong>
+                    </td>
+                </ng-container>
 
-        <ng-container matColumnDef="repos">
-          <th mat-header-cell *matHeaderCellDef>Repos</th>
-          <td mat-cell *matCellDef="let element">{{ element.public_repos }}</td>
-        </ng-container>
+                <ng-container matColumnDef="repos">
+                    <th mat-header-cell *matHeaderCellDef>Repos</th>
+                    <td mat-cell *matCellDef="let element">{{ element.public_repos }}</td>
+                </ng-container>
 
-        <ng-container matColumnDef="followers">
-          <th mat-header-cell *matHeaderCellDef>Followers</th>
-          <td mat-cell *matCellDef="let element">{{ element.followers }}</td>
-        </ng-container>
+                <ng-container matColumnDef="followers">
+                    <th mat-header-cell *matHeaderCellDef>Followers</th>
+                    <td mat-cell *matCellDef="let element">{{ element.followers }}</td>
+                </ng-container>
 
-        <tr
-          mat-header-row
-          *matHeaderRowDef="displayedColumns; sticky: true"
-        ></tr>
-        <tr
-          class="cursor-pointer"
-          mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          (click)="onUserClick(row)"
-        ></tr>
-      </table>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr
+                    class="cursor-pointer"
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                    (click)="onUserClick(row)"
+                ></tr>
+            </table>
 
-      <mat-card *ngIf="isLoading" class="flex-center-center">
-        <mat-spinner color="primary" mode="indeterminate"> </mat-spinner>
-      </mat-card>
+            <mat-card *ngIf="isLoading" class="flex-center-center">
+                <mat-spinner color="primary" mode="indeterminate"> </mat-spinner>
+            </mat-card>
 
-      <mat-card
-        *ngIf="!isLoading && users.length === 0"
-        class="flex-center-center"
-      >
-        No items to display
-      </mat-card>
+            <mat-card *ngIf="!isLoading && users.length === 0" class="flex-center-center">
+                No items to display
+            </mat-card>
 
-      <mat-paginator
-        #paginator
-        [pageSize]="10"
-        [pageSizeOptions]="[5, 10, 20]"
-        [length]="userTotalCount"
-        showFirstLastButtons
-        (page)="onPageChange($event)"
-        class="mat-paginator-sticky"
-      ></mat-paginator>
+            <mat-paginator
+                #paginator
+                [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 20]"
+                [length]="userTotalCount"
+                showFirstLastButtons
+                (page)="onPageChange($event)"
+                class="mat-paginator-sticky"
+            ></mat-paginator>
+        </div>
     </div>
-  </div>
 </div>

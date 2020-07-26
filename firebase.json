@@ -1,40 +1,40 @@
 {
-  "hosting": [
-    {
-      "public": "dist/githubApp",
-      "ignore": [
-        "firebase.json",
-        ".firebaserc",
-        ".vscode",
-        ".git",
-        ".gitignore",
-        ".editorconfig",
-        "src/**/.*",
-        "database.rules.json",
-        "package.json",
-        "README.md",
-        "tsconfig.json",
-        "webpack.config.js",
-        "yarn.lock",
-        "**/node_modules/**"
-      ],
-      "rewrites": [
+    "hosting": [
         {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
-      "target": "githubApp",
-      "public": "dist/githubApp",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [
+            "public": "dist/githubApp",
+            "ignore": [
+                "firebase.json",
+                ".firebaserc",
+                ".vscode",
+                ".git",
+                ".gitignore",
+                ".editorconfig",
+                "src/**/.*",
+                "database.rules.json",
+                "package.json",
+                "README.md",
+                "tsconfig.json",
+                "webpack.config.js",
+                "yarn.lock",
+                "**/node_modules/**"
+            ],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        },
         {
-          "source": "**",
-          "destination": "/index.html"
+            "target": "githubApp",
+            "public": "dist/githubApp",
+            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

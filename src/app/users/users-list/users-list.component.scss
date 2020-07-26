@@ -1,28 +1,27 @@
 .table-wrapper {
-  position: relative;
-  width: 80vh;
-  height: 70vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  table {
-    height: 100%;
-    width: 100%;
-    img {
-      padding: 10px;
+    position: relative;
+    width: 80vh;
+    height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    table {
+        height: 100%;
+        width: 100%;
+        img {
+            padding: 10px;
+        }
     }
-  }
 }
 
 .loader-absolute {
-  position: absolute;
-  left: 50%;
+    position: absolute;
+    left: 50%;
 }
 
 .sort-wrapper {
-  span {
-    padding-right: 20px;
-  }
-  padding-top: 10px;
-  padding-bottom: 20px;
+    span {
+        padding-right: 20px;
+    }
+    padding-top: 10px;
+    padding-bottom: 20px;
 }
-

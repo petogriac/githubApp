@@ -1,14 +1,14 @@
 <mat-toolbar color="primary">
-  GithubApp
-  <span class="spacer"></span>
-  <span *ngIf="user && user.authenticated" class="username">{{ user.name }}</span>
-  <button *ngIf="user && !user.authenticated" mat-raised-button (click)="onSignIn()">
-    Sign in
-  </button>
-  <button *ngIf="user && user.authenticated" mat-raised-button (click)="onProfile()">
-    Profile
-  </button>
-  <button *ngIf="user && user.authenticated" mat-raised-button (click)="onSignOut()">
-    Sign out
-  </button>
+    GithubApp
+    <span class="spacer"></span>
+    <span *ngIf="user && user.authenticated" class="username">{{ user.name }}</span>
+    <button *ngIf="user && !user.authenticated" mat-raised-button (click)="onSignIn()">
+        Sign in
+    </button>
+    <button *ngIf="user && user.authenticated" mat-raised-button (click)="onProfile()">
+        Profile
+    </button>
+    <button *ngIf="user && user.authenticated" mat-raised-button (click)="onSignOut()">
+        Sign out
+    </button>
 </mat-toolbar>
