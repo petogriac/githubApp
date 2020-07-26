@@ -19,8 +19,8 @@ export class UserDetailComponent implements OnInit {
   repos = new Array<any>();
   followers = new Array<any>();
   issues = new Array<any>();
-  displayedReposColumns: string[] = ['name', 'description'];
-  displayedFollowersColumns: string[] = ['avatar_url', 'login'];
+  displayedReposColumns: string[] = ['name', 'description', 'created'];
+  displayedFollowersColumns: string[] = ['avatar_url', 'login', 'type'];
   displayedIssuesColumns: string[] = ['title', 'link'];
 
   constructor(
@@ -69,11 +69,33 @@ export class UserDetailComponent implements OnInit {
     this.router.navigate([`/user/${user.login}`]);
   }
 
+  onReposPageChange(event): void {
+    this.usersApiService
+      .getUserPublicRepos(this.username, event.pageIndex + 1, event.pageSize)
+      .subscribe(
+        (response) => {
+          this.repos = response;
+        },
+        (error) => {}
+      );
+  }
+
+  onFollowersPageChange(event): void {
+    this.usersApiService
+      .getUserFollowers(this.username, event.pageIndex + 1, event.pageSize)
+      .subscribe(
+        (response) => {
+          this.followers = response;
+        },
+        (error) => {}
+      );
+  }
+
   private getAdditionalInfo(): void {
     this.isLoadingAdditional = true;
     const zippedApis = [
-      this.usersApiService.getUserPublicRepos(this.username),
-      this.usersApiService.getUserFollowers(this.username),
+      this.usersApiService.getUserPublicRepos(this.username, 1, 10),
+      this.usersApiService.getUserFollowers(this.username, 1, 10),
     ];
     if (this.isProfile) {
       zippedApis.push(this.usersApiService.getUserIssues());
@@ -83,7 +105,6 @@ export class UserDetailComponent implements OnInit {
       this.followers = followers;
       if (issues) {
         this.issues = issues;
-        console.log(this.issues);
       }
       this.isLoadingAdditional = false;
     });

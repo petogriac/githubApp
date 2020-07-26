@@ -10,6 +10,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 // Components
 import { UsersListComponent } from './users-list/users-list.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
@@ -30,6 +33,9 @@ import { UsersApiService } from './users.api.service';
     MatProgressSpinnerModule,
     MatIconModule,
     MatTabsModule,
+    MatPaginatorModule,
+    MatCardModule,
+    MatButtonToggleModule,
   ],
   providers: [UsersApiService],
 })

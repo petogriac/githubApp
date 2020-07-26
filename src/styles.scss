@@ -9,18 +9,8 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-.flex-center-container {
-  display: flex;
-  justify-content: center;
-}
-
-.flex-align-center {
-  display: flex;
-  align-items: center;
-}
-
 .box {
-  padding: 50px;
+  padding: 20px;
   position: relative;
   text-align: center;
 }
@@ -35,4 +25,34 @@ body {
 
 .rounded-image {
   border-radius: 50%;
+}
+
+// FLEX CLASSES
+
+.flex-center-center {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.flex-spacebetween {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-center-container {
+  display: flex;
+  justify-content: center;
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+.mat-paginator-sticky {
+  bottom: 0px;
+  position: sticky;
+  z-index: 10;
+  width: 100%;
 }

@@ -4,9 +4,16 @@
   width: auto;
 }
 
-table {
-  width: 800px;
-  img {
-    padding: 10px;
+.table-wrapper {
+  position: relative;
+  height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  table {
+    min-width: 500px;
+    padding-top: 10px;
+    img {
+      padding: 10px;
+    }
   }
 }

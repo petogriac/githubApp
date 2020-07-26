@@ -43,16 +43,32 @@ export class UsersApiService {
     );
   }
 
-  getUserPublicRepos(username: string): Observable<any> {
+  getUserPublicRepos(
+    username: string,
+    pageNumber: number,
+    perPage: number
+  ): Observable<any> {
     return this.httpClient.get(
-      routePrefix + routes.users + `/${username}` + routes.repos,
+      routePrefix +
+        routes.users +
+        `/${username}` +
+        routes.repos +
+        `?page=${pageNumber}&per_page=${perPage}`,
       httpOpptionsForHigherRate
     );
   }
 
-  getUserFollowers(username: string): Observable<any> {
+  getUserFollowers(
+    username: string,
+    pageNumber: number,
+    perPage: number
+  ): Observable<any> {
     return this.httpClient.get(
-      routePrefix + routes.users + `/${username}` + routes.followers,
+      routePrefix +
+        routes.users +
+        `/${username}` +
+        routes.followers +
+        `?page=${pageNumber}&per_page=${perPage}`,
       httpOpptionsForHigherRate
     );
   }
@@ -69,12 +85,19 @@ export class UsersApiService {
     );
   }
 
-  getUsersByLocation(location: string, pageNumber: string): Observable<any> {
+  // Add sorting by number of repo(default), number of followers or date(created)
+
+  getUsersByLocation(
+    location: string,
+    sortType: string,
+    pageNumber: number,
+    perPage: number
+  ): Observable<any> {
     return this.httpClient.get(
       routePrefix +
         `/search/users?q=location:${
           location ? location : undefined
-        }&page=${pageNumber}&per_page=10`,
+        }&page=${pageNumber}&per_page=${perPage}`,
       httpOpptionsForHigherRate
     );
   }

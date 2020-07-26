@@ -25,7 +25,7 @@ export class AuthService {
       }
     });
     if (localStorage.getItem(storageTokenKey)) {
-      this.token = localStorage.getItem(storageTokenKey);
+      this.token = sessionStorage.getItem(storageTokenKey);
     }
   }
 
@@ -34,7 +34,7 @@ export class AuthService {
     provider.addScope('repo');
     this.afAuth.signInWithPopup(provider).then((response) => {
       this.token = response.credential['accessToken'];
-      localStorage.setItem(storageTokenKey, this.token);
+      sessionStorage.setItem(storageTokenKey, this.token);
     });
   }
 
@@ -42,7 +42,7 @@ export class AuthService {
     try {
       await this.afAuth.signOut();
       this.token = null;
-      localStorage.removeItem(storageTokenKey);
+      sessionStorage.removeItem(storageTokenKey);
     } catch (error) {
       console.log('Sign out failed', error);
     }

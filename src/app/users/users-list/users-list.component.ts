@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { UsersApiService } from '../users.api.service';
 import { Router } from '@angular/router';
 import { zip } from 'rxjs';
-
 import IUser from '../interfaces/IUser';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-users-list',
@@ -12,11 +12,15 @@ import IUser from '../interfaces/IUser';
 })
 export class UsersListComponent implements OnInit {
   location: string;
-  // TODO add interface IUser
   users = new Array<IUser>();
   usersDetailedData = new Array<any>();
   displayedColumns: string[] = ['avatar_url', 'login', 'repos', 'followers'];
   isLoading: boolean;
+  firstLoading = true;
+  userTotalCount: string;
+  sortType = 'repo';
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private usersApiService: UsersApiService,
@@ -25,40 +29,66 @@ export class UsersListComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  searchUsers(): void {
+  searchUsers(
+    pageNumber: number,
+    perPage: number,
+    firstSearch?: boolean
+  ): void {
+    if (firstSearch) {
+      this.firstLoading = true;
+    }
+    const apisPerUser = [];
+    this.usersDetailedData = [];
     this.isLoading = true;
-    this.usersApiService.getUsersByLocation(this.location, '1').subscribe(
-      (response) => {
-        const apisPerUser = [];
-        this.usersDetailedData = [];
-        this.users = response.items;
-        this.users.forEach((user) => {
-          apisPerUser.push(this.usersApiService.getUserByUsername(user.login));
-        });
-
-        zip(...apisPerUser).subscribe(
-          (usersDetailedData) => {
-            console.log(usersDetailedData);
-            this.usersDetailedData = usersDetailedData;
+    this.usersApiService
+      .getUsersByLocation(this.location, this.sortType, pageNumber, perPage)
+      .subscribe(
+        (response) => {
+          this.firstLoading = false;
+          this.users = response.items;
+          this.userTotalCount = response.total_count;
+          if (this.users.length > 0) {
+            this.users.forEach((user) => {
+              apisPerUser.push(
+                this.usersApiService.getUserByUsername(user.login)
+              );
+            });
+          } else {
             this.isLoading = false;
-          },
-          (error) => {
-            console.log(error);
-            if (error.statusText === 'rate limit exceeded') {
-              alert(`${error.statusText}: please sign in`);
-            } else {
-              alert('Something went wrong');
-            }
           }
-        );
-      },
-      (error) => {
-        alert('Something went wrong');
-      }
-    );
+
+          zip(...apisPerUser).subscribe(
+            (usersDetailedData) => {
+              this.usersDetailedData = usersDetailedData;
+              this.isLoading = false;
+            },
+            (error) => {
+              if (error.statusText === 'rate limit exceeded') {
+                alert(`${error.statusText}: please sign in`);
+              } else {
+                alert('Something went wrong');
+              }
+            }
+          );
+        },
+        (error) => {
+          this.isLoading = false;
+          this.firstLoading = false;
+          alert('Something went wrong');
+        }
+      );
+  }
+
+  sortUsersBy(sortType: string): void {
+    this.sortType = sortType;
+    this.searchUsers(1, 10, true);
   }
 
   onUserClick(user: IUser): void {
     this.router.navigate([`/user/${user.login}`]);
+  }
+
+  onPageChange(event): void {
+    this.searchUsers(event.pageIndex + 1, event.pageSize);
   }
 }
