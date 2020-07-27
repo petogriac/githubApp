@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { UsersApiService } from '../users.api.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { zip } from 'rxjs';
-import IUser from '../interfaces/IUser';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { zip } from 'rxjs';
+
+import { UsersApiService } from '../users.api.service';
 
 @Component({
     selector: 'app-users-list',
@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class UsersListComponent implements OnInit {
     location: string;
-    users = new Array<IUser>();
+    users = new Array<any>();
     usersDetailedData = new Array<any>();
     displayedColumns: string[] = ['avatar_url', 'login', 'repos', 'followers'];
     isLoading: boolean;
@@ -28,12 +28,12 @@ export class UsersListComponent implements OnInit {
     ngOnInit(): void {}
 
     searchUsers(pageNumber: number, perPage: number, firstSearch?: boolean): void {
-        if (firstSearch) {
-            this.firstLoading = true;
-        }
         const apisPerUser = [];
         this.usersDetailedData = [];
         this.isLoading = true;
+        if (firstSearch) {
+            this.firstLoading = true;
+        }
         this.usersApiService.getUsersByLocation(this.location, this.sortType, pageNumber, perPage).subscribe(
             response => {
                 this.firstLoading = false;
@@ -43,19 +43,19 @@ export class UsersListComponent implements OnInit {
                     this.users.forEach(user => {
                         apisPerUser.push(this.usersApiService.getUserByUsername(user.login));
                     });
+
+                    zip(...apisPerUser).subscribe(
+                        usersDetailedData => {
+                            this.usersDetailedData = usersDetailedData;
+                            this.isLoading = false;
+                        },
+                        error => {
+                            this.openErrorMsg('Something went wrong');
+                        }
+                    );
                 } else {
                     this.isLoading = false;
                 }
-
-                zip(...apisPerUser).subscribe(
-                    usersDetailedData => {
-                        this.usersDetailedData = usersDetailedData;
-                        this.isLoading = false;
-                    },
-                    error => {
-                        this.openErrorMsg('Something went wrong');
-                    }
-                );
             },
             error => {
                 this.isLoading = false;
@@ -70,7 +70,7 @@ export class UsersListComponent implements OnInit {
         this.searchUsers(1, 10, true);
     }
 
-    onUserClick(user: IUser): void {
+    onUserClick(user): void {
         this.router.navigate([`/user/${user.login}`]);
     }
 

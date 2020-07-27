@@ -1,11 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UsersApiService } from '../users.api.service';
-import IUser from '../interfaces/IUser';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { zip, Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { UsersApiService } from '../users.api.service';
 
 @Component({
     selector: 'app-user-detail',
@@ -14,7 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class UserDetailComponent implements OnInit, OnDestroy {
     username: string;
-    user: IUser;
+    user: any;
     isLoading: boolean;
     isLoadingAdditional: boolean;
     isProfile: boolean;
@@ -26,13 +25,11 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     displayedFollowersColumns: string[] = ['avatar_url', 'login', 'type'];
     displayedIssuesColumns: string[] = ['title', 'link'];
     subscription: Subscription;
-    durationInSeconds = 5;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private usersApiService: UsersApiService,
-        private authService: AuthService,
         private _snackBar: MatSnackBar
     ) {}
 
@@ -40,35 +37,9 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         this.subscription = this.route.params.subscribe(params => {
             this.isLoading = true;
             if (params && params.username) {
-                this.isProfile = false;
-                this.username = params.username;
-                this.usersApiService
-                    .getUserByUsername(this.username)
-                    .pipe(finalize(() => (this.isLoading = false)))
-                    .subscribe(
-                        response => {
-                            this.user = response;
-                            this.getAdditionalInfo();
-                        },
-                        error => {
-                            this.openErrorMsg('Something went wrong');
-                        }
-                    );
+                this.loadAnonymousUser(params.username);
             } else {
-                this.isProfile = true;
-                this.usersApiService
-                    .getAuthUser()
-                    .pipe(finalize(() => (this.isLoading = false)))
-                    .subscribe(
-                        response => {
-                            this.user = response;
-                            this.username = response.login;
-                            this.getAdditionalInfo();
-                        },
-                        error => {
-                            this.router.navigate(['/users']);
-                        }
-                    );
+                this.loadSignedUser();
             }
         });
     }
@@ -77,7 +48,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         this.subscription.unsubscribe();
     }
 
-    onFollowerClick(user: IUser): void {
+    onFollowerClick(user): void {
         this.router.navigate([`/user/${user.login}`]);
     }
 
@@ -114,8 +85,42 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         );
     }
 
-    openErrorMsg(message: string): void {
+    private openErrorMsg(message: string): void {
         this._snackBar.open(message);
+    }
+
+    private loadAnonymousUser(username: string): void {
+        this.isProfile = false;
+        this.username = username;
+        this.usersApiService
+            .getUserByUsername(this.username)
+            .pipe(finalize(() => (this.isLoading = false)))
+            .subscribe(
+                response => {
+                    this.user = response;
+                    this.getAdditionalInfo();
+                },
+                error => {
+                    this.openErrorMsg('Something went wrong');
+                }
+            );
+    }
+
+    private loadSignedUser(): void {
+        this.isProfile = true;
+        this.usersApiService
+            .getAuthUser()
+            .pipe(finalize(() => (this.isLoading = false)))
+            .subscribe(
+                response => {
+                    this.user = response;
+                    this.username = response.login;
+                    this.getAdditionalInfo();
+                },
+                error => {
+                    this.router.navigate(['/users']);
+                }
+            );
     }
 
     private getAdditionalInfo(): void {
