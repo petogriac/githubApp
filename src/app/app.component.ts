@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 import { Subscription } from 'rxjs';
-import { _MatTabGroupBase } from '@angular/material/tabs';
+import { UsersApiService } from './users/users.api.service';
 
 export interface IAuthUser {
     authenticated: boolean;
@@ -13,7 +13,7 @@ export interface IAuthUser {
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
     title = 'githubApp';
     authUser: IAuthUser = {
         name: null,
@@ -22,24 +22,30 @@ export class AppComponent implements OnInit {
     subscription: Subscription;
     isLoading = true;
 
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService, private usersApiService: UsersApiService) {}
 
-    ngOnInit() {
-        this.authService.authUser.subscribe(response => {
+    ngOnInit(): void {
+        this.subscription = this.authService.authUser.subscribe(response => {
             this.authUser = response;
             this.isLoading = false;
         });
+        this.usersApiService.getAuthUser().subscribe(
+            response => {},
+            error => {
+                this.authService.signOut();
+            }
+        );
     }
 
-    login() {
+    login(): void {
         this.authService.signIn();
     }
 
-    logout() {
+    logout(): void {
         this.authService.signOut();
     }
 
-    ngOnDestroy() {
+    ngOnDestroy(): void {
         this.subscription.unsubscribe();
     }
 }

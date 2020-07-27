@@ -123,6 +123,15 @@
                         <tr mat-header-row *matHeaderRowDef="displayedIssuesColumns; sticky: true"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedIssuesColumns"></tr>
                     </table>
+                    <mat-paginator
+                        #paginator
+                        [pageSize]="10"
+                        [pageSizeOptions]="[5, 10, 20]"
+                        [length]="issuesCount"
+                        showFirstLastButtons
+                        (page)="onIssuesPageChange($event)"
+                        class="mat-paginator-sticky"
+                    ></mat-paginator>
                 </div>
             </mat-tab>
         </mat-tab-group>

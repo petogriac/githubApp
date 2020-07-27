@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { zip } from 'rxjs';
 import IUser from '../interfaces/IUser';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-users-list',
@@ -18,11 +19,11 @@ export class UsersListComponent implements OnInit {
     isLoading: boolean;
     firstLoading = true;
     userTotalCount: string;
-    sortType = 'repo';
+    sortType = 'repositories';
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
-    constructor(private usersApiService: UsersApiService, private router: Router) {}
+    constructor(private usersApiService: UsersApiService, private router: Router, private _snackBar: MatSnackBar) {}
 
     ngOnInit(): void {}
 
@@ -52,23 +53,19 @@ export class UsersListComponent implements OnInit {
                         this.isLoading = false;
                     },
                     error => {
-                        if (error.statusText === 'rate limit exceeded') {
-                            alert(`${error.statusText}: please sign in`);
-                        } else {
-                            alert('Something went wrong');
-                        }
+                        this.openErrorMsg('Something went wrong');
                     }
                 );
             },
             error => {
                 this.isLoading = false;
                 this.firstLoading = false;
-                alert('Something went wrong');
+                this.openErrorMsg('Something went wrong');
             }
         );
     }
 
-    sortUsersBy(sortType: string): void {
+    onSortChange(sortType: string): void {
         this.sortType = sortType;
         this.searchUsers(1, 10, true);
     }
@@ -79,5 +76,9 @@ export class UsersListComponent implements OnInit {
 
     onPageChange(event): void {
         this.searchUsers(event.pageIndex + 1, event.pageSize);
+    }
+
+    openErrorMsg(message: string): void {
+        this._snackBar.open(message);
     }
 }

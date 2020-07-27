@@ -9,7 +9,8 @@ const routes = {
     user: '/user',
     repos: '/repos',
     followers: '/followers',
-    issues: '/issues?filter=all'
+    issues: '/issues',
+    search: '/search'
 };
 
 const httpOpptionsForHigherRate = {
@@ -49,22 +50,22 @@ export class UsersApiService {
         );
     }
 
-    getUserIssues(): Observable<any> {
+    getUserIssues(username: string, pageNumber: number, perPage: number): Observable<any> {
         const httpOptions = {
             headers: new HttpHeaders({
                 Authorization: `Bearer ${this.authService.token}`
             })
         };
-        return this.httpClient.get(routePrefix + routes.user + routes.issues, httpOptions);
+        const query = `?q=user:${username}&type:issue?page=${pageNumber}&per_page=${perPage}`;
+
+        return this.httpClient.get(routePrefix + routes.search + routes.issues + query, httpOptions);
     }
 
-    // Add sorting by number of repo(default), number of followers or date(created)
-
     getUsersByLocation(location: string, sortType: string, pageNumber: number, perPage: number): Observable<any> {
-        return this.httpClient.get(
-            routePrefix +
-                `/search/users?q=location:${location ? location : undefined}&page=${pageNumber}&per_page=${perPage}`,
-            httpOpptionsForHigherRate
-        );
+        const query = `?q=location:${
+            location ? location : undefined
+        }&sort=${sortType}&page=${pageNumber}&per_page=${perPage}`;
+
+        return this.httpClient.get(routePrefix + routes.search + routes.users + query, httpOpptionsForHigherRate);
     }
 }

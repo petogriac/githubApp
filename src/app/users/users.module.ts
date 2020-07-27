@@ -13,6 +13,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 // Components
 import { UsersListComponent } from './users-list/users-list.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
@@ -35,7 +36,8 @@ import { UsersApiService } from './users.api.service';
         MatTabsModule,
         MatPaginatorModule,
         MatCardModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        MatSnackBarModule
     ],
     providers: [UsersApiService]
 })

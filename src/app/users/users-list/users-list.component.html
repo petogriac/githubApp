@@ -5,7 +5,12 @@
             <div>
                 <mat-form-field>
                     <mat-label>Location</mat-label>
-                    <input matInput placeholder="e.g. Bratislava" [(ngModel)]="location" />
+                    <input
+                        (keyup.enter)="searchUsers(1, 10, true)"
+                        matInput
+                        placeholder="e.g. Bratislava"
+                        [(ngModel)]="location"
+                    />
                 </mat-form-field>
                 <div>
                     <button mat-raised-button color="primary" (click)="searchUsers(1, 10, true)" class="button">
@@ -14,49 +19,20 @@
                 </div>
             </div>
         </div>
+        <div class="sort-wrapper" *ngIf="!firstLoading">
+            <span>Sort by</span>
+            <mat-button-toggle-group
+                name="sortType"
+                aria-label="Sort Type"
+                [value]="sortType"
+                (change)="onSortChange($event.value)"
+            >
+                <mat-button-toggle value="repositories">Repo Count</mat-button-toggle>
+                <mat-button-toggle value="followers">Followers Count</mat-button-toggle>
+                <mat-button-toggle value="joined">Date Created</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
         <div class="table-wrapper" *ngIf="!firstLoading">
-            <!-- <div class="sort-wrapper">
-        <span>Sort by</span>
-        <mat-button-toggle-group
-          name="sortType"
-          aria-label="Sort Type"
-          value="repo"
-        >
-          <mat-button-toggle [value]="sortType">Repo Count</mat-button-toggle>
-          <mat-button-toggle value="followers"
-            >Followers Count</mat-button-toggle
-          >
-          <mat-button-toggle value="created">Date Created</mat-button-toggle>
-        </mat-button-toggle-group>
-      </div> -->
-
-            <!-- <div class="flex-spacebetween">
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="sortUsersBy('repo')"
-          class="button"
-        >
-          Sort by Repo Count
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="sortUsersBy('followers')"
-          class="button"
-        >
-          Sort by Followers Count
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="sortUsersBy('created')"
-          class="button"
-        >
-          Sort by Created Date
-        </button>
-      </div> -->
-
             <table mat-table [dataSource]="usersDetailedData" [hidden]="isLoading">
                 <ng-container matColumnDef="avatar_url">
                     <th mat-header-cell *matHeaderCellDef>Avatar</th>

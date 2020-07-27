@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersApiService } from '../users.api.service';
 import IUser from '../interfaces/IUser';
-import { zip } from 'rxjs';
+import { zip, Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-user-detail',
     templateUrl: './user-detail.component.html',
     styleUrls: ['./user-detail.component.scss']
 })
-export class UserDetailComponent implements OnInit {
+export class UserDetailComponent implements OnInit, OnDestroy {
     username: string;
     user: IUser;
     isLoading: boolean;
@@ -19,50 +21,60 @@ export class UserDetailComponent implements OnInit {
     repos = new Array<any>();
     followers = new Array<any>();
     issues = new Array<any>();
+    issuesCount: number;
     displayedReposColumns: string[] = ['name', 'description', 'created'];
     displayedFollowersColumns: string[] = ['avatar_url', 'login', 'type'];
     displayedIssuesColumns: string[] = ['title', 'link'];
+    subscription: Subscription;
+    durationInSeconds = 5;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private usersApiService: UsersApiService,
-        private authService: AuthService
+        private authService: AuthService,
+        private _snackBar: MatSnackBar
     ) {}
 
     ngOnInit(): void {
-        this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe(params => {
             this.isLoading = true;
             if (params && params.username) {
                 this.isProfile = false;
                 this.username = params.username;
-                this.usersApiService.getUserByUsername(this.username).subscribe(
-                    response => {
-                        this.user = response;
-                        this.isLoading = false;
-                        this.getAdditionalInfo();
-                    },
-                    error => {
-                        alert('something went wrong');
-                        this.isLoading = false;
-                    }
-                );
+                this.usersApiService
+                    .getUserByUsername(this.username)
+                    .pipe(finalize(() => (this.isLoading = false)))
+                    .subscribe(
+                        response => {
+                            this.user = response;
+                            this.getAdditionalInfo();
+                        },
+                        error => {
+                            this.openErrorMsg('Something went wrong');
+                        }
+                    );
             } else {
                 this.isProfile = true;
-                this.usersApiService.getAuthUser().subscribe(
-                    response => {
-                        this.user = response;
-                        this.username = response.login;
-                        this.getAdditionalInfo();
-                        this.isLoading = false;
-                    },
-                    error => {
-                        alert('something went wrong');
-                        this.isLoading = false;
-                    }
-                );
+                this.usersApiService
+                    .getAuthUser()
+                    .pipe(finalize(() => (this.isLoading = false)))
+                    .subscribe(
+                        response => {
+                            this.user = response;
+                            this.username = response.login;
+                            this.getAdditionalInfo();
+                        },
+                        error => {
+                            this.router.navigate(['/users']);
+                        }
+                    );
             }
         });
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     onFollowerClick(user: IUser): void {
@@ -74,7 +86,9 @@ export class UserDetailComponent implements OnInit {
             response => {
                 this.repos = response;
             },
-            error => {}
+            error => {
+                this.openErrorMsg('Something went wrong');
+            }
         );
     }
 
@@ -83,8 +97,25 @@ export class UserDetailComponent implements OnInit {
             response => {
                 this.followers = response;
             },
-            error => {}
+            error => {
+                this.openErrorMsg('Something went wrong');
+            }
         );
+    }
+
+    onIssuesPageChange(event): void {
+        this.usersApiService.getUserIssues(this.username, event.pageIndex + 1, event.pageSize).subscribe(
+            response => {
+                this.issues = response.items;
+            },
+            error => {
+                this.openErrorMsg('Something went wrong');
+            }
+        );
+    }
+
+    openErrorMsg(message: string): void {
+        this._snackBar.open(message);
     }
 
     private getAdditionalInfo(): void {
@@ -94,15 +125,21 @@ export class UserDetailComponent implements OnInit {
             this.usersApiService.getUserFollowers(this.username, 1, 10)
         ];
         if (this.isProfile) {
-            zippedApis.push(this.usersApiService.getUserIssues());
+            zippedApis.push(this.usersApiService.getUserIssues(this.username, 1, 10));
         }
-        zip(...zippedApis).subscribe(([repos, followers, issues]) => {
-            this.repos = repos;
-            this.followers = followers;
-            if (issues) {
-                this.issues = issues;
+        zip(...zippedApis).subscribe(
+            ([repos, followers, issues]) => {
+                this.repos = repos;
+                this.followers = followers;
+                if (issues) {
+                    this.issuesCount = issues.total_count;
+                    this.issues = issues.items;
+                }
+                this.isLoadingAdditional = false;
+            },
+            error => {
+                this.openErrorMsg('Something went wrong');
             }
-            this.isLoadingAdditional = false;
-        });
+        );
     }
 }

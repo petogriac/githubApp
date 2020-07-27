@@ -1,20 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 
 const storageTokenKey = 'githubToken';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnDestroy {
     token: string;
     signedIn: Observable<any>;
+    subscription: Subscription;
 
     private authUserSubj: BehaviorSubject<any> = new BehaviorSubject<any>(null);
     public readonly authUser: Observable<any> = this.authUserSubj.asObservable();
 
     constructor(private afAuth: AngularFireAuth) {
-        this.afAuth.authState.subscribe(response => {
+        this.subscription = this.afAuth.authState.subscribe(response => {
             if (response) {
                 this.authUserSubj.next({
                     name: response.displayName,
@@ -27,6 +28,10 @@ export class AuthService {
         if (localStorage.getItem(storageTokenKey)) {
             this.token = sessionStorage.getItem(storageTokenKey);
         }
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.unsubscribe();
     }
 
     async signIn() {
